@@ -1,0 +1,113 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: xxl-job-executor
+  name: xxl-job-executor
+  namespace: chengd
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: svc
+      k8s.kuboard.cn/name: xxl-job-executor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        k8s.kuboard.cn/layer: svc
+        k8s.kuboard.cn/name: xxl-job-executor
+    spec:
+      containers:
+        - image: 'blog01-docker.pkg.coding.net/xxl-job-executor/xxl-job-executor/executor:latest'
+          imagePullPolicy: Always
+          name: xxl-job-executor
+          ports:
+            - containerPort: 8081
+              hostPort: 8081
+              name: tcp-8081
+              protocol: TCP
+            - containerPort: 8083
+              hostPort: 8083
+              name: tcp-8083
+              protocol: TCP
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /home/logs/halo-executor
+              name: volume-hazed
+          startupProbe:
+            httpGet:
+              path: '/heathchecks/startupProbe'
+              port: 8081
+              scheme: HTTP
+            failureThreshold: 3 #连续失败几次视为故障
+            initialDelaySeconds: 60 #副本启动多久后开始探测
+            periodSeconds: 10 #多久探测一次
+          readinessProbe:
+            httpGet:
+              path: '/heathchecks/readinessProbe'
+              port: 8081
+              scheme: HTTP
+            failureThreshold: 3 #连续失败几次视为故障，容器将被重置为不可用，不接收 service 转发的请求
+            initialDelaySeconds: 60 #副本启动多久后开始探测
+            periodSeconds: 10 #多久探测一次
+          livenessProbe:
+            httpGet:
+              path: '/heathchecks/livenessProbe'
+              port: 8081
+              scheme: HTTP
+            failureThreshold: 3 #连续失败几次视为故障，杀掉并重启容器
+            initialDelaySeconds: 60 #副本启动多久后开始探测
+            periodSeconds: 10 #多久探测一次
+
+      dnsPolicy: ClusterFirstWithHostNet
+      imagePullSecrets:
+        - name: coding
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - hostPath:
+            path: /home/logs/halo-executor
+            type: Directory
+          name: volume-hazed
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: xxl-job-executor
+  name: xxl-job-executor
+  namespace: chengd
+spec:
+  clusterIP: 10.43.22.86
+  clusterIPs:
+    - 10.43.22.86
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: csjqty
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    - name: f4erep
+      port: 8083
+      protocol: TCP
+      targetPort: 8083
+  selector:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: xxl-job-executor
+  sessionAffinity: None
+  type: NodePort
