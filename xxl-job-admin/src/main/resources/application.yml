@@ -6,6 +6,14 @@ eureka:
     fetch-registry: true #获取注册实例列表
     service-url:
       defaultZone: http://localhost:8761/eureka #配置中心地址
+    eureka-server-connect-timeout-seconds: 10 #连接注册中心超时时间, 默认 5, 单位秒, 一般和注册中心服务失效时间配置一致
+    eureka-server-read-timeout-seconds: 10 # 读取服务列表的超时时间, 默认 8, 单位秒
+  instance:
+    appname: ${spring.application.name} # 实例名称, 默认使用 spring.application.name 的值, 一般不配置
+  #hostname: ${spring.application.name} # 主机名称, 作用于 eureka 管理页面服务实例列表的链接地址, 默认是自己电脑名
+    prefer-ip-address: true # 使用 ip 地址定义在注册中心的地址, 作用于 eureka 管理页面服务实例列表的链接地址, 默认为 false
+    #ip-address: 127.0.0.1 # 主机 ip 地址, 基本上不配置, prefer-ip-address.instance.eureka=true 优先取这个
+    lease-renewal-interval-in-seconds: 5 # 服务续约间隔时间, 默认为 90, 单位秒
 spring:
   application:
     name: xxl-job-admin #服务名称
