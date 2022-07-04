@@ -1,1 +1,17 @@
-
+server:
+  port: 8761 # 端口
+spring:
+  application:
+    name: eureka-server # 服务名称
+eureka:
+  instance:
+    appname: eureka-server
+    hostname: localhost
+  client:
+    service-url:
+      #设置 Eureka 服务端的地址,如果是单体服务就配置该 Eureka 单台服务的 ip 端口号 /eureka。需要注意的是 /eureka 一定要加上。
+      defaultZone: http://localhost:8761/eureka # eureka 的地址信息(服务端可以将自己注册到注册中心)
+    register-with-eureka: false  #是否将自己注册到服务端，Eureka 服务端需要配置成false 默认是 true
+    fetch-registry: false  #是否从其他Eureka服务端获取注册信息，默认为true。如过是单台服务器可以设置为false
+  dashboard:
+    path: /eureka-ui
