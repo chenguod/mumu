@@ -31,12 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-eureka-server/mvnw
-eureka-server/mvnw.cmd
-eureka-server/.mvn/wrapper/maven-wrapper.jar
-eureka-server/.mvn/wrapper/maven-wrapper.properties
-job/mvnw
-job/mvnw.cmd
-job/.mvn/wrapper/maven-wrapper.jar
-job/.mvn/wrapper/maven-wrapper.properties
-*.jar

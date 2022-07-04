@@ -1,4 +1,4 @@
-package com.cgd.xxljobexecutor.config;
+package com.xgd.mumu.config;
 
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import org.slf4j.Logger;
