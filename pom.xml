@@ -57,13 +57,7 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.4</version>
         </dependency>
-
-        <!--添加xxl-job依赖-->
-        <dependency>
-            <groupId>com.xuxueli</groupId>
-            <artifactId>xxl-job-core</artifactId>
-            <version>2.2.0</version>
-        </dependency>
+        
     </dependencies>
 
     <build>
