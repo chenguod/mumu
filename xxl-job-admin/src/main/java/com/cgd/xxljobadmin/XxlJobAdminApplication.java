@@ -9,6 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 public class XxlJobAdminApplication {
 
     public static void main(String[] args) {
+        System.out.println("太上老君保佑");
         SpringApplication.run(XxlJobAdminApplication.class, args);
     }
 
